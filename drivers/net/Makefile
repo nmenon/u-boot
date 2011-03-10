@@ -33,6 +33,7 @@ obj-$(CONFIG_INCA_IP_SWITCH) += inca-ip_sw.o
 obj-$(CONFIG_DRIVER_TI_KEYSTONE_NET) += keystone_net.o
 obj-$(CONFIG_DRIVER_KS8695ETH) += ks8695eth.o
 obj-$(CONFIG_KS8851_MLL) += ks8851_mll.o
+obj-$(CONFIG_KS8851) += ks8851.o
 obj-$(CONFIG_LAN91C96) += lan91c96.o
 obj-$(CONFIG_MACB) += macb.o
 obj-$(CONFIG_MCFFEC) += mcffec.o mcfmii.o
