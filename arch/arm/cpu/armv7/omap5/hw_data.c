@@ -340,6 +340,7 @@ struct vcores_data omap5430_volts_es2 = {
 	.mpu.value = VDD_MPU_ES2,
 	.mpu.addr = SMPS_REG_ADDR_12_MPU,
 	.mpu.pmic = &palmas,
+	.mpu.abb_tx_done_mask = OMAP_ABB_MPU_TXDONE_MASK,
 
 	.core.value = VDD_CORE_ES2,
 	.core.addr = SMPS_REG_ADDR_8_CORE,
