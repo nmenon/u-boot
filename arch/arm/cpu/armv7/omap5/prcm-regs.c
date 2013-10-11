@@ -432,6 +432,10 @@ struct omap_sys_ctrl_regs const dra7xx_ctrl = {
 	.control_port_emif2_sdram_config	= 0x4AE0C118,
 	.control_emif1_sdram_config_ext		= 0x4AE0C144,
 	.control_emif2_sdram_config_ext		= 0x4AE0C148,
+	.control_wkup_ldovbb_mpu_voltage_ctrl	= 0x4AE0C158,
+	.control_wkup_ldovbb_iva_voltage_ctrl	= 0x4A002470,
+	.control_wkup_ldovbb_eve_voltage_ctrl	= 0x4A00246C,
+	.control_wkup_ldovbb_gpu_voltage_ctrl	= 0x4AE0C154,
 	.control_padconf_mode			= 0x4AE0C5A0,
 	.control_xtal_oscillator		= 0x4AE0C5A4,
 	.control_i2c_2				= 0x4AE0C5A8,
@@ -802,6 +806,10 @@ struct prcm_regs const dra7xx_prcm = {
 	.cm_dsp_clkstctrl			= 0x4a005400,
 	.cm_dsp_dsp_clkctrl			= 0x4a005420,
 
+	/* prm irqstatus regs */
+	.prm_irqstatus_mpu			= 0x4ae06010,
+	.prm_irqstatus_mpu_2			= 0x4ae06014,
+
 	/* cm2.ckgen */
 	.cm_clksel_usb_60mhz			= 0x4a008104,
 	.cm_clkmode_dpll_per			= 0x4a008140,
@@ -959,4 +967,13 @@ struct prcm_regs const dra7xx_prcm = {
 	.prm_vc_val_bypass			= 0x4ae07da0,
 	.prm_vc_cfg_i2c_mode			= 0x4ae07db4,
 	.prm_vc_cfg_i2c_clk			= 0x4ae07db8,
+
+	.prm_abbldo_mpu_setup			= 0x4ae07ddc,
+	.prm_abbldo_mpu_ctrl			= 0x4ae07de0,
+	.prm_abbldo_iva_setup			= 0x4ae07e34,
+	.prm_abbldo_iva_ctrl			= 0x4ae07e24,
+	.prm_abbldo_eve_setup			= 0x4ae07e30,
+	.prm_abbldo_eve_ctrl			= 0x4ae07e20,
+	.prm_abbldo_gpu_setup			= 0x4ae07de4,
+	.prm_abbldo_gpu_ctrl			= 0x4ae07de8,
 };
