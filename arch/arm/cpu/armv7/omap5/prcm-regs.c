@@ -294,7 +294,6 @@ struct prcm_regs const omap5_es1_prcm = {
 
 struct omap_sys_ctrl_regs const omap5_ctrl = {
 	.control_status				= 0x4A002134,
-	.control_std_fuse_opp_vdd_mpu_2		= 0x4A0021B4,
 	.control_padconf_core_base		= 0x4A002800,
 	.control_paconf_global			= 0x4A002DA0,
 	.control_paconf_mode			= 0x4A002DA4,
