@@ -21,9 +21,21 @@
 
 #include <configs/omap4_common.h>
 
-/* Battery Charger */
 #ifndef CONFIG_SPL_BUILD
+/* Battery Charger */
 #define CONFIG_CMD_BAT			1
+/* Network Basic support */
+#define CONFIG_SYS_ENABLE_PADS_ALL     1
+#undef CONFIG_OMAP3_SPI
+#undef CONFIG_CMD_SPI
+#define CONFIG_OMAP4_SPI                1
+/* Network */
+#define CONFIG_NET_MULTI	1
+#define CONFIG_KS8851		1
+/* Enabled commands */
+#define CONFIG_CMD_DHCP		/* DHCP Support			*/
+#define CONFIG_CMD_NET		/* bootp, tftpboot, rarpboot	*/
+#define CONFIG_CMD_NFS		/* NFS support			*/
 #endif
 
 /* ENV related config options */
