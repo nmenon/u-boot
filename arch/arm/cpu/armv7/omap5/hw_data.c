@@ -320,6 +320,85 @@ struct pmic_data palmas = {
 	.pmic_write	= omap_vc_bypass_send_value,
 };
 
+#define MMR_LOCK_1_UNLOCK	0x2FF1AC2B
+#define MMR_IO_DELAY_UNLOCK	0x0000AAAA
+
+/**
+ * \brief   scale_iodelay function implements IODelay Recalibration.
+ *          IODelay calibration is required if changing to AVS0 voltage,
+ *          otherwise there will be some IO timing error versus datasheet.
+ *
+ * \param   None.
+ *
+ *
+ * \return  none.
+ *
+ **/
+#ifdef CONFIG_SPL_BUILD
+void recalibrate_io_delay(void)
+{
+	int temp, period;
+	u32 lock1, io_lock;
+
+	/* Unlock the global lock to write to the MMRs */
+	io_lock = readl((*ctrl)->iodelay_config_reg_8);
+	writel(MMR_IO_DELAY_UNLOCK, (*ctrl)->iodelay_config_reg_8);
+
+	/* Unlock the MMR_LOCK1 */
+	lock1 = readl((*ctrl)->control_core_mmr_lock1);
+	writel(MMR_LOCK_1_UNLOCK, (*ctrl)->control_core_mmr_lock1);
+
+	temp = readl((*ctrl)->iodelay_config_reg_2) & ~(0xFFFF);
+
+	/*
+	 * The L4_ICLK(133MHz) clock period in ps divided by 10
+	 * (or, equivalently, L3_ICLK clock period in ps divided by 5),
+	 * then rounded down to the closest integer.
+	 * Either way, L4_iCLK is a constant immaterial of sysclk,
+	 * so, use the derived result
+	 */
+	period = 0x2EF;
+	writel(temp | period, (*ctrl)->iodelay_config_reg_2);
+
+	/*
+	 * Isolate all the IO. Do dummy read to
+	 * ensure t > 10ns between two steps
+	 */
+	clrsetbits_le32((*prcm)->prm_io_pmctrl, (1 << 0), 0x1);
+	readl((*prcm)->prm_io_pmctrl);
+
+	clrsetbits_le32((*ctrl)->ctrl_core_sma_sw_0, (1 << 3), (1 << 3));
+	readl((*ctrl)->ctrl_core_sma_sw_0);
+
+	clrsetbits_le32((*prcm)->prm_io_pmctrl, (1 << 0), 0x0);
+
+	/* Trigger the recalibration and update the delay values accordingly */
+	clrsetbits_le32((*ctrl)->iodelay_config_reg_0, (1 << 0), 0x1);
+	while (readl((*ctrl)->iodelay_config_reg_0) & 0x1)
+							;
+
+	/* wait for rom read to complete */
+	clrsetbits_le32((*ctrl)->iodelay_config_reg_0, (1 << 1), (1 << 1));
+	while (readl((*ctrl)->iodelay_config_reg_0) & 0x2)
+							;
+	/* XXX: DO MANUAL MODE CONFIGURATION HERE */
+
+	clrsetbits_le32((*prcm)->prm_io_pmctrl, (1 << 0), 0x1);
+	readl((*prcm)->prm_io_pmctrl);
+
+	clrsetbits_le32((*ctrl)->ctrl_core_sma_sw_0, (1 << 3), 0x0);
+	readl((*ctrl)->ctrl_core_sma_sw_0);
+
+	clrsetbits_le32((*prcm)->prm_io_pmctrl, (1 << 0), 0x0);
+
+	/* Lock the MMR_LOCK1 */
+	writel(lock1, (*ctrl)->control_core_mmr_lock1);
+
+	/* Lock the global lock to write to the MMRs */
+	writel(io_lock, (*ctrl)->iodelay_config_reg_8);
+}
+#endif
+
 struct pmic_data tps659038 = {
 	.base_offset = PALMAS_SMPS_BASE_VOLT_UV,
 	.step = 10000, /* 10 mV represented in uV */
@@ -331,6 +410,9 @@ struct pmic_data tps659038 = {
 	.i2c_slave_addr	= TPS659038_I2C_SLAVE_ADDR,
 	.pmic_bus_init	= gpi2c_init,
 	.pmic_write	= palmas_i2c_write_u8,
+#ifdef CONFIG_SPL_BUILD
+	.recalib	= recalibrate_io_delay,
+#endif
 };
 
 struct vcores_data omap5430_volts = {

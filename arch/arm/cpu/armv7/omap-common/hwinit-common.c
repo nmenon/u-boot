@@ -121,6 +121,7 @@ void s_init(void)
 #endif
 	init_omap_revision();
 	hw_data_init();
+	prcm_init();
 
 #ifdef CONFIG_SPL_BUILD
 	if (warm_reset() &&
@@ -138,7 +139,7 @@ void s_init(void)
 	preloader_console_init();
 	do_io_settings();
 #endif
-	prcm_init();
+
 #ifdef CONFIG_SPL_BUILD
 #ifdef CONFIG_BOARD_EARLY_INIT_F
 	board_early_init_f();
