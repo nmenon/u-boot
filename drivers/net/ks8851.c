@@ -727,6 +727,11 @@ static int ks8851_eth_init(struct eth_device *dev, bd_t *bd)
 
 	u16 txCntl, rxCntl, w, intMask;
 	PHARDWARE pHardware = &gHardware;
+	static int run_once = 0;
+
+	if (run_once)
+		return 0;
+	run_once = 1;
 
 	pHardware->m_uCurFrameIndex = 0;
 	pHardware->m_uFramesRemained = 0;
