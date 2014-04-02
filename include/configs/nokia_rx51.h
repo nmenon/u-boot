@@ -130,11 +130,16 @@
 #define CONFIG_CMD_MMC			/* MMC support */
 #define CONFIG_CMD_GPIO			/* Enable gpio command */
 
+#define CONFIG_SYS_LONGHELP
+#define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING		/* add command line history */
 #define CONFIG_AUTO_COMPLETE		/* add autocompletion support */
 
-#define CONFIG_CMD_BOOTMENU		/* ANSI terminal Boot Menu */
+//#define CONFIG_CMD_BOOTMENU		/* ANSI terminal Boot Menu */
+#define CONFIG_ENV_VARS_UBOOT_CONFIG	/* Strongly encouraged */
 #define CONFIG_CMD_CLEAR		/* ANSI terminal clear screen command */
+#define CONFIG_CMD_BOOTZ
+#define CONFIG_CMD_ASKENV
 
 #ifdef ONENAND_SUPPORT
 
@@ -276,9 +281,9 @@ int rx51_kp_getc(void);
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"mtdparts=" MTDPARTS_DEFAULT "\0" \
 	"usbtty=cdc_acm\0" \
-	"stdin=vga\0" \
-	"stdout=vga\0" \
-	"stderr=vga\0" \
+	"stdin=serial\0" \
+	"stdout=serial\0" \
+	"stderr=serial\0" \
 	"setcon=setenv stdin ${con};" \
 		"setenv stdout ${con};" \
 		"setenv stderr ${con}\0" \
@@ -286,14 +291,27 @@ int rx51_kp_getc(void);
 	"usbcon=setenv con usbtty; run setcon\0" \
 	"vgacon=setenv con vga; run setcon\0" \
 	"slide=gpio input " __stringify(GPIO_SLIDE) "\0" \
+	"loadbootenv=fatload mmc ${mmcnum} ${loadaddr} uEnv.txt\0" \
+	"importbootenv=echo Importing environment from mmc${mmcdev} ...; " \
+		"env import -t ${loadaddr} ${filesize}\0" \
 	"switchmmc=mmc dev ${mmcnum}\0" \
+	"fdtaddr=0x80F80000\0" \
+	"fdt_high=0xffffffff\0" \
 	"kernaddr=0x82008000\0" \
 	"initrdaddr=0x84008000\0" \
 	"scriptaddr=0x86008000\0" \
+	"fdt_file=omap3-n900.dtb\0"\
+	"kernel_file=zImage\0"\
 	"fileload=${mmctype}load mmc ${mmcnum}:${mmcpart} " \
 		"${loadaddr} ${mmcfile}\0" \
 	"kernload=setenv loadaddr ${kernaddr};" \
 		"setenv mmcfile ${mmckernfile};" \
+		"run fileload\0" \
+	"kernloadz=setenv loadaddr ${kernaddr};" \
+		"setenv mmcfile ${kernel_file};" \
+		"run fileload\0" \
+	"ftdload=setenv loadaddr ${fdtaddr};" \
+		"setenv mmcfile ${fdt_file};" \
 		"run fileload\0" \
 	"initrdload=setenv loadaddr ${initrdaddr};" \
 		"setenv mmcfile ${mmcinitrdfile};" \
@@ -305,6 +323,8 @@ int rx51_kp_getc(void);
 		"${mmcnum}:${mmcpart} ...; source ${scriptaddr}\0" \
 	"kernboot=echo Booting ${mmckernfile} from mmc " \
 		"${mmcnum}:${mmcpart} ...; bootm ${kernaddr}\0" \
+	"kernbootz=echo Booting ${kernel_file}+${fdt_file} from mmc " \
+		"${mmcnum}:${mmcpart} ...; bootz ${kernaddr} - ${fdtaddr}\0" \
 	"kerninitrdboot=echo Booting ${mmckernfile} ${mmcinitrdfile} from mmc "\
 		"${mmcnum}:${mmcpart} ...; bootm ${kernaddr} ${initrdaddr}\0" \
 	"attachboot=echo Booting attached kernel image ...;" \
@@ -321,6 +341,13 @@ int rx51_kp_getc(void);
 				"run kernboot;" \
 			"fi;" \
 		"fi\0" \
+	"trymmckernbootz=if run switchmmc; then " \
+			"if run ftdload; then " \
+				"if run kernloadz; then " \
+					"run kernbootz;" \
+				"fi;" \
+			"fi;" \
+			"fi\0" \
 	"trymmckerninitrdboot=if run switchmmc; then " \
 			"if run initrdload; then " \
 				"if run kernload; then " \
@@ -329,7 +356,8 @@ int rx51_kp_getc(void);
 			"fi; " \
 		"fi\0" \
 	"trymmcpartboot=setenv mmcscriptfile boot.scr; run trymmcscriptboot;" \
-		"setenv mmckernfile uImage; run trymmckernboot\0" \
+		"setenv mmckernfile uImage; run trymmckernboot;" \
+		"run trymmckernbootz\0"\
 	"trymmcallpartboot=setenv mmcpart 1; run trymmcpartboot;" \
 		"setenv mmcpart 2; run trymmcpartboot;" \
 		"setenv mmcpart 3; run trymmcpartboot;" \
@@ -370,11 +398,7 @@ int rx51_kp_getc(void);
 		"if ${mmcdone}; then " \
 			"run scriptboot;" \
 		"fi;" \
-	"fi;" \
-	"if run slide; then true; else " \
-		"setenv bootmenu_delay 0;" \
-		"setenv bootdelay 0;" \
-	"fi"
+	"fi;"
 
 #define CONFIG_POSTBOOTMENU \
 	"echo;" \
@@ -388,16 +412,13 @@ int rx51_kp_getc(void);
 	"echo"
 
 #define CONFIG_BOOTCOMMAND \
-	"run sdboot;" \
-	"run emmcboot;" \
-	"run attachboot;" \
 	"echo"
 
-#define CONFIG_BOOTDELAY 30
-#define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_MENU
-#define CONFIG_MENU_SHOW
-
+#define CONFIG_BOOTDELAY 3
+//#define CONFIG_AUTOBOOT_KEYED
+//#define CONFIG_MENU
+//#define CONFIG_MENU_SHOW
+#define CONFIG_AUTOBOOT
 /*
  * Miscellaneous configurable options
  */
