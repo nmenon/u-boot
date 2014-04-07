@@ -295,6 +295,7 @@ int rx51_kp_getc(struct stdio_dev *sdev);
 	"fdtaddr=0x80F80000\0" \
 	"fdt_high=0xffffffff\0" \
 	"kernaddr=0x82008000\0" \
+	"loadaddr=0x82008000\0" \
 	"initrdaddr=0x84008000\0" \
 	"scriptaddr=0x86008000\0" \
 	"fdt_file=omap3-n900.dtb\0"\
@@ -378,24 +379,7 @@ int rx51_kp_getc(struct stdio_dev *sdev);
 	""
 
 #define CONFIG_PREBOOT \
-	"setenv mmcnum 1; setenv mmcpart 1;" \
-	"setenv mmcscriptfile bootmenu.scr;" \
-	"if run switchmmc; then " \
-		"setenv mmcdone true;" \
-		"setenv mmctype fat;" \
-		"if run scriptload; then true; else " \
-			"setenv mmctype ext2;" \
-			"if run scriptload; then true; else " \
-				"setenv mmctype ext4;" \
-				"if run scriptload; then true; else " \
-					"setenv mmcdone false;" \
-				"fi;" \
-			"fi;" \
-		"fi;" \
-		"if ${mmcdone}; then " \
-			"run scriptboot;" \
-		"fi;" \
-	"fi;"
+	"setenv loadaddr ${kernaddr};echo"
 
 #define CONFIG_POSTBOOTMENU \
 	"echo;" \
