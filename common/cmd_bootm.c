@@ -1928,4 +1928,80 @@ U_BOOT_CMD(
 	bootz,	CONFIG_SYS_MAXARGS,	1,	do_bootz,
 	"boot Linux zImage image from memory", bootz_help_text
 );
+
+#if defined(CONFIG_NR_DRAM_BANKS) && defined(CONFIG_OF_LIBFDT)
+int do_set_fdt_high(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+	bd_t *bd = gd->bd;
+	/*
+	 * Linux kernel only recognizes the first 704 MB as low memory, For
+	 * example, if you have a system with 1 GB memory at physical address
+	 * 0x10000000, you may need to set fdt_high as 0x3C000000 to have the
+	 * device tree blob be copied to the maximum address of the 704 MB low
+	 * memory, so that Linux kernel can access it during the boot procedure.
+	 */
+	ulong max_low_mem_size = 0x2C000000;
+	ulong prev_size = 0;
+	ulong fdt_offset = 0;
+	ulong fdt_high = getenv_hex("fdt_high", 0x0);
+	int i;
+
+	/* If already set */
+	if (fdt_high) {
+		printf("fdt_high already set\n");
+		return 1;
+	}
+
+	if (!CONFIG_NR_DRAM_BANKS) {
+		printf("No DRAM banks??\n");
+		return 1;
+	}
+
+	for (i = 0; i < CONFIG_NR_DRAM_BANKS; ++i) {
+		/* If we have a dummy dram entry.. break out */
+		if (!bd->bi_dram[i].size)
+			break;
+		/* If we go beyond lowmem size.. break out */
+		if (prev_size + bd->bi_dram[i].size > max_low_mem_size)
+			break;
+		prev_size += bd->bi_dram[i].size;
+	}
+
+	/* Search did not run out of lowmem, choose previous entry */
+	if (i == CONFIG_NR_DRAM_BANKS)
+		i--;
+
+	/* No DRAM? */
+	if (!bd->bi_dram[i].size && !i) {
+		printf("No DRAM?\n");
+		return 1;
+	}
+
+	if (prev_size + bd->bi_dram[i].size > max_low_mem_size)
+		fdt_offset = max_low_mem_size - prev_size;
+	else
+		fdt_offset = bd->bi_dram[i].size;
+
+	fdt_high = bd->bi_dram[i].start + fdt_offset;
+	setenv_hex("fdt_high", fdt_high);
+	return 0;
+}
+
+#ifdef CONFIG_SYS_LONGHELP
+static char set_fdt_high_help_text[] =
+	"    - setup a safe fdt_high based on dram configuration"
+	" Linux kernel only recognizes the first 704 MB as low memory, For\n"
+	" example, if you have a system with 1 GB memory at physical address\n"
+	" 0x10000000, you may need to set fdt_high as 0x3C000000 to have the\n"
+	" device tree blob be copied to the maximum address of the 704 MB low\n"
+	" memory, so that Linux kernel can access it during the boot"
+	" procedure\n";
+#endif
+U_BOOT_CMD(
+	set_fdt_high,	1, 1, do_set_fdt_high,
+	"setup safe fdt_high", set_fdt_high_help_text
+);
+
+#endif	/* CONFIG_NR_DRAM_BANKS  && CONFIG_OF_LIBFDT */
+
 #endif	/* CONFIG_CMD_BOOTZ */
