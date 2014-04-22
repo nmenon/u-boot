@@ -58,7 +58,7 @@
 	"fdt_addr_r=0x88000000\0" \
 	"rdaddr=0x88080000\0" \
 	"ramdisk_addr_r=0x88080000\0" \
-	"bootm_size=0x10000000\0"
+	"bootm_size=0x08000000\0"
 
 /*
  * Default to a quick boot delay.
