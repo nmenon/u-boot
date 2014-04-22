@@ -102,6 +102,12 @@
 #define CONFIG_CMD_SETEXPR	/* Evaluate expressions		*/
 #define CONFIG_CMD_GPIO     /* Enable gpio command */
 
+#define CONFIG_CMD_NET      /* bootp, tftpboot, rarpboot    */
+#define CONFIG_CMD_NFS      /* NFS support          */
+#define CONFIG_CMD_PING
+#define CONFIG_CMD_DHCP
+
+
 #define CONFIG_VIDEO_OMAP3	/* DSS Support			*/
 
 /*
