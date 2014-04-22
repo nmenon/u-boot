@@ -296,8 +296,8 @@ int rx51_kp_getc(void);
 		"env import -t ${loadaddr} ${filesize}\0" \
 	"switchmmc=mmc dev ${mmcnum}\0" \
 	"fdtaddr=0x80F80000\0" \
-	"fdt_high=0xffffffff\0" \
 	"kernaddr=0x82008000\0" \
+	"bootm_size=0x08000000\0" \
 	"loadaddr=0x82008000\0" \
 	"initrdaddr=0x84008000\0" \
 	"scriptaddr=0x86008000\0" \
