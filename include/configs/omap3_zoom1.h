@@ -121,9 +121,13 @@
 		"video=${videospec},mode:${videomode} " \
 		"root=/dev/mtdblock4 rw " \
 		"rootfstype=jffs2\0" \
-	"loadbootscript=fatload mmc ${mmcdev} ${loadaddr} boot.scr\0" \
+	"loadbootscr=fatload mmc ${mmcdev} ${loadaddr} boot.scr\0" \
+	"importbootscr=source ${loadaddr}\0" \
+	"importbootenv=env import -t $loadaddr $filesize\0" \
+	"loadbootenv=fatload mmc ${mmcdev} ${loadaddr} uEnv.txt\0" \
+	"loadbootscript=if run loadbootscr; then echo boot.scr; else run loadbootenv;fi\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
-		"source ${loadaddr}\0" \
+		"if run importbootscr; then echo boot.scr imported; else run importbootenv;fi\0" \
 	"loadimage=load mmc ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
 	"loadfdt=load mmc ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
 	"loadzimage=setenv bootfile zImage; if run loadimage; then run loadfdt;fi\0"\
@@ -142,6 +146,10 @@
 	"mmc dev ${mmcdev}; if mmc rescan; then " \
 		"if run loadbootscript; then " \
 			"run bootscript; " \
+			"if test -n $uenvcmd; then " \
+				"echo Running uenvcmd ...;" \
+				"run uenvcmd;" \
+			"fi;" \
 		"else " \
 			"if run loadimage; then " \
 				"run mmcboot; " \
