@@ -144,6 +144,7 @@
 	"loadimage=load ${devtype} ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
 	"loadfdt=load ${devtype} ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
 	"mmcboot=mmc dev ${mmcdev}; " \
+		"setenv devtype mmc; " \
 		"setenv devnum ${mmcdev}; " \
 		"if mmc rescan; then " \
 			"echo SD/MMC found on device ${devnum};" \
