@@ -90,8 +90,8 @@ const struct emif_regs emif_regs_266_mhz_2cs = {
 };
 
 const struct emif_regs emif_regs_ddr3_532_mhz_1cs = {
-	.sdram_config_init		= 0x61851B32,
-	.sdram_config			= 0x61851B32,
+	.sdram_config_init		= 0x61851BB2,
+	.sdram_config			= 0x61851BB2,
 	.sdram_config2			= 0x0,
 	.ref_ctrl			= 0x00001035,
 	.sdram_tim1			= 0xCCCF36B3,
@@ -114,8 +114,8 @@ const struct emif_regs emif_regs_ddr3_532_mhz_1cs = {
 };
 
 const struct emif_regs emif_regs_ddr3_532_mhz_1cs_es2 = {
-	.sdram_config_init              = 0x61851B32,
-	.sdram_config                   = 0x61851B32,
+	.sdram_config_init              = 0x61851BB2,
+	.sdram_config                   = 0x61851BB2,
 	.sdram_config2			= 0x0,
 	.ref_ctrl                       = 0x00001035,
 	.sdram_tim1                     = 0xCCCF36B3,
@@ -138,9 +138,9 @@ const struct emif_regs emif_regs_ddr3_532_mhz_1cs_es2 = {
 };
 
 const struct emif_regs emif_1_regs_ddr3_532_mhz_1cs_dra_es1 = {
-	.sdram_config_init              = 0x61851ab2,
-	.sdram_config                   = 0x61851ab2,
-	.sdram_config2			= 0x08000000,
+	.sdram_config_init              = 0x61851bb2,
+	.sdram_config                   = 0x61851bb2,
+	.sdram_config2			= 0x00000000,
 	.ref_ctrl                       = 0x00001035,
 	.sdram_tim1                     = 0xCCCF36B3,
 	.sdram_tim2                     = 0x308F7FDA,
@@ -162,9 +162,9 @@ const struct emif_regs emif_1_regs_ddr3_532_mhz_1cs_dra_es1 = {
 };
 
 const struct emif_regs emif_2_regs_ddr3_532_mhz_1cs_dra_es1 = {
-	.sdram_config_init              = 0x61851B32,
-	.sdram_config                   = 0x61851B32,
-	.sdram_config2			= 0x08000000,
+	.sdram_config_init              = 0x61851BB2,
+	.sdram_config                   = 0x61851BB2,
+	.sdram_config2			= 0x00000000,
 	.ref_ctrl                       = 0x00001035,
 	.sdram_tim1                     = 0xCCCF36B3,
 	.sdram_tim2                     = 0x308F7FDA,
@@ -200,10 +200,14 @@ const struct dmm_lisa_map_regs lisa_map_4G_x_2_x_2 = {
  * so mapping 1GB interleaved and 512MB non-interleaved
  */
 const struct dmm_lisa_map_regs lisa_map_2G_x_2_x_2_2G_x_1_x_2 = {
-	.dmm_lisa_map_0 = 0x0,
-	.dmm_lisa_map_1 = 0x80640300,
-	.dmm_lisa_map_2 = 0xC0500220,
-	.dmm_lisa_map_3 = 0xFF020100,
+	.dmm_lisa_map_0 = 0x80500100,
+	.dmm_lisa_map_1 = 0xa0500120,
+	.dmm_lisa_map_2 = 0x0,
+	.dmm_lisa_map_3 = 0x0,
+	//.dmm_lisa_map_0 = 0x80500100,
+	//.dmm_lisa_map_1 = 0xa0500120,
+	//.dmm_lisa_map_2 = 0xc0500240,
+	//.dmm_lisa_map_3 = 0xe0500260,
 	.is_ma_present	= 0x1
 };
 
