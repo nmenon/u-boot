@@ -356,19 +356,19 @@ struct vcores_data dra752_volts = {
 	.gpu.value	= VDD_GPU_DRA752,
 	.gpu.efuse.reg	= STD_FUSE_OPP_VMIN_GPU_NOM,
 	.gpu.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
-	.gpu.addr	= TPS659038_REG_ADDR_SMPS6_GPU,
+	.gpu.addr	= TPS659038_REG_ADDR_SMPS45_EVE,
 	.gpu.pmic	= &tps659038,
 
 	.core.value	= VDD_CORE_DRA752,
 	.core.efuse.reg	= STD_FUSE_OPP_VMIN_CORE_NOM,
 	.core.efuse.reg_bits = DRA752_EFUSE_REGBITS,
-	.core.addr	= TPS659038_REG_ADDR_SMPS7_CORE,
+	.core.addr	= TPS659038_REG_ADDR_SMPS6_GPU,
 	.core.pmic	= &tps659038,
 
 	.iva.value	= VDD_IVA_DRA752,
 	.iva.efuse.reg	= STD_FUSE_OPP_VMIN_IVA_NOM,
 	.iva.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
-	.iva.addr	= TPS659038_REG_ADDR_SMPS8_IVA,
+	.iva.addr	= TPS659038_REG_ADDR_SMPS45_EVE,
 	.iva.pmic	= &tps659038,
 };
 
