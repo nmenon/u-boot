@@ -466,4 +466,8 @@ int rx51_kp_getc(struct stdio_dev *sdev);
 /* Reserve protected RAM for attached kernel */
 #define CONFIG_PRAM			((KERNEL_MAXSIZE >> 10)+1)
 
+#define CONFIG_PARTITION_UUIDS
+#define CONFIG_CMD_PART
+
+
 #endif /* __CONFIG_H */
