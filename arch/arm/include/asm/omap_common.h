@@ -313,6 +313,7 @@ struct prcm_regs {
 	u32 prm_rstctrl;
 	u32 prm_rstst;
 	u32 prm_rsttime;
+	u32 prm_io_pmctrl;
 	u32 prm_vc_val_bypass;
 	u32 prm_vc_cfg_i2c_mode;
 	u32 prm_vc_cfg_i2c_clk;
@@ -451,6 +452,12 @@ struct omap_sys_ctrl_regs {
 	u32 control_efuse_12;
 	u32 control_efuse_13;
 	u32 control_padconf_wkup_base;
+	u32 iodelay_config_reg_0;
+	u32 iodelay_config_reg_2;
+	u32 iodelay_config_reg_3;
+	u32 iodelay_config_reg_4;
+	u32 iodelay_config_reg_8;
+	u32 ctrl_core_sma_sw_0;
 };
 
 struct dpll_params {
