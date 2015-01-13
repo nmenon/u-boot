@@ -128,7 +128,6 @@ void s_init(void)
 		force_emif_self_refresh();
 #endif
 	watchdog_init();
-	set_mux_conf_regs();
 #ifdef CONFIG_SPL_BUILD
 	srcomp_enable();
 	setup_clocks_for_console();
@@ -140,6 +139,7 @@ void s_init(void)
 	do_io_settings();
 #endif
 	prcm_init();
+	set_mux_conf_regs();
 #ifdef CONFIG_SPL_BUILD
 #ifdef CONFIG_BOARD_EARLY_INIT_F
 	board_early_init_f();
