@@ -18,9 +18,18 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+struct cfg_entry {
+	u32 offset;
+	u32 a_delay;
+	u32 g_delay;
+};
+
 struct pad_conf_entry {
 	u32 offset;
 	u32 val;
+	struct cfg_entry cfg_in;
+	struct cfg_entry cfg_oen;
+	struct cfg_entry cfg_out;
 };
 
 struct omap_sysinfo {

@@ -454,6 +454,7 @@ struct omap_sys_ctrl_regs const dra7xx_ctrl = {
 	.control_efuse_3			= 0x4AE0C5D0,
 	.control_efuse_4			= 0x4AE0C5D4,
 	.control_efuse_13			= 0x4AE0C5F0,
+	.iodelay_config_base			= 0x4844A000,
 	.iodelay_config_reg_0			= 0x4844A00C,
 	.iodelay_config_reg_2			= 0x4844A014,
 	.iodelay_config_reg_3			= 0x4844A018,
