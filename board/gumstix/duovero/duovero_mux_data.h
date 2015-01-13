@@ -195,5 +195,10 @@ const struct pad_conf_entry wkup_padconf_array_non_essential[] = {
 	{PAD1_SYS_BOOT7, (M0)},						/* sys_boot7 */
 };
 
-
+const struct pad_conf_entry padconf_console[] = {
+	{UART3_CTS_RCTX, (PTU | IEN | M0)},		/* uart3_tx */
+	{UART3_RTS_SD, (M0)},				/* uart3_rts_sd */
+	{UART3_RX_IRRX, (PTU | IEN | M0)},		/* uart3_rx */
+	{UART3_TX_IRTX, (M0)}				/* uart3_tx */
+};
 #endif /* _DUOVERO_MUX_DATA_H_ */

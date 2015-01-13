@@ -576,6 +576,7 @@ void do_scale_vcore(u32 vcore_reg, u32 volt_mv, struct pmic_data *pmic);
 void abb_setup(u32 fuse, u32 ldovbb, u32 setup, u32 control,
 	       u32 txdone, u32 txdone_mask, u32 opp);
 s8 abb_setup_ldovbb(u32 fuse, u32 ldovbb);
+void setup_mux_for_console(void);
 
 void usb_fake_mac_from_die_id(u32 *id);
 

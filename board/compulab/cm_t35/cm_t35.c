@@ -353,6 +353,12 @@ static void cm_t3730_set_muxconf(void)
 	MUX_VAL(CP(SYS_BOOT6),		(IDIS | PTD | DIS | M3)); /*DSS_DATA23*/
 }
 
+static void cm_t3x_console_muxconf(void)
+{
+	MUX_VAL(CP(UART3_RX_IRRX),	(IEN  | PTD | DIS | M0)); /*UART3_RX*/
+	MUX_VAL(CP(UART3_TX_IRTX),	(IDIS | PTD | DIS | M0)); /*UART3_TX*/
+}
+
 void set_muxconf_regs(void)
 {
 	cm_t3x_set_common_muxconf();
@@ -361,6 +367,11 @@ void set_muxconf_regs(void)
 		cm_t35_set_muxconf();
 	else
 		cm_t3730_set_muxconf();
+}
+
+void setup_mux_for_console(void)
+{
+	cm_t3x_console_muxconf();
 }
 
 #if defined(CONFIG_GENERIC_MMC) && !defined(CONFIG_SPL_BUILD)

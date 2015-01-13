@@ -132,6 +132,7 @@ void s_init(void)
 #ifdef CONFIG_SPL_BUILD
 	srcomp_enable();
 	setup_clocks_for_console();
+	setup_mux_for_console();
 
 	gd = &gdata;
 

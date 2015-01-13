@@ -141,4 +141,16 @@ const struct pad_conf_entry core_padconf_array_essential[] = {
 	{USB2_DRVVBUS, (M0 | IEN | FSC) },
 	{SPI1_CS1, (PEN | IDIS | M14) },
 };
+
+const struct pad_conf_entry padconf_console[] = {
+#if (CONFIG_CONS_INDEX == 1)
+	{UART1_RXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART1_RXD */
+	{UART1_TXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART1_TXD */
+	{UART1_CTSN, (IEN | PTU | PDIS | M3)},	/* UART1_CTSN */
+	{UART1_RTSN, (IEN | PTU | PDIS | M3)},	/* UART1_RTSN */
+#elif (CONFIG_CONS_INDEX == 3)
+	{UART3_RXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART3_RXD */
+	{UART3_TXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART3_TXD */
+#endif
+};
 #endif /* _MUX_DATA_DRA7XX_H_ */

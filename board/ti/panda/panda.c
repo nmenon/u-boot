@@ -291,6 +291,12 @@ void set_muxconf_regs_essential(void)
 			   sizeof(struct pad_conf_entry));
 }
 
+void setup_mux_for_console(void)
+{
+	do_set_mux((*ctrl)->control_padconf_core_base, padconf_console,
+		   sizeof(padconf_console) / sizeof(struct pad_conf_entry));
+}
+
 #if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_GENERIC_MMC)
 int board_mmc_init(bd_t *bis)
 {

@@ -52,4 +52,9 @@ const struct pad_conf_entry core_padconf_array_essential[] = {
 	{USB1_DRVVBUS, (M0 | FSC) },
 	{SPI1_CS1, (PEN | IDIS | M14) }, /* GPIO7_11 */
 };
+
+const struct pad_conf_entry padconf_console[] = {
+	{UART3_RXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART3_RXD */
+	{UART3_TXD, (FSC | IEN | PTU | PDIS | M0)}, /* UART3_TXD */
+};
 #endif /* _MUX_DATA_BEAGLE_X15_H_ */

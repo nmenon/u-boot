@@ -55,4 +55,8 @@ const struct pad_conf_entry wkup_padconf_array_essential[] = {
 
 };
 
+const struct pad_conf_entry padconf_console[] = {
+	{UART3_RX_IRRX, (PTU | IEN | M0)}, /*  UART3_RX_IRRX    */
+	{UART3_TX_IRTX, (M0)},    /*  UART3_TX_IRTX    */
+};
 #endif /* _EVM4430_MUX_DATA_H */
