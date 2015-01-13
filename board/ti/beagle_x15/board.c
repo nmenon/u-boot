@@ -14,6 +14,7 @@
 #include <usb.h>
 #include <asm/omap_common.h>
 #include <asm/emif.h>
+#include <asm/arch/dra7xx_iodelay.h>
 #include <asm/arch/clock.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/arch/mmc_host_def.h>
@@ -250,10 +251,9 @@ static void do_set_mux32(u32 base,
 
 void set_muxconf_regs_essential(void)
 {
-	do_set_mux32((*ctrl)->control_padconf_core_base,
-		     core_padconf_array_essential,
-		     sizeof(core_padconf_array_essential) /
-		     sizeof(struct pad_conf_entry));
+	recalibrate_iodelay(core_padconf_array_essential,
+			    sizeof(core_padconf_array_essential) /
+			    sizeof(struct pad_conf_entry));
 }
 
 void setup_mux_for_console(void)
