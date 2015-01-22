@@ -517,6 +517,16 @@ void scale_vcores(struct vcores_data const *vcores)
 	val = optimize_vcore_voltage(&vcores->core);
 	do_scale_vcore(vcores->core.addr, val, vcores->core.pmic);
 
+	/*
+	 * IO delay recalibration should be done immediately after
+	 * adjusting AVS voltages for VDD_CORE_L.
+	 * Respective boards should call __recalibrate_iodelay()
+	 * with proper mux, virtual and manual mode configurations.
+	 */
+#ifdef CONFIG_IODELAY_RECALIBRATION
+	recalibrate_iodelay();
+#endif
+
 	val = optimize_vcore_voltage(&vcores->mpu);
 	do_scale_vcore(vcores->mpu.addr, val, vcores->mpu.pmic);
 
