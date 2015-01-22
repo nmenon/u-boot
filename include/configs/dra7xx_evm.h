@@ -14,6 +14,7 @@
 
 #define CONFIG_DRA7XX
 #define CONFIG_BOARD_EARLY_INIT_F
+#define CONFIG_IODELAY_RECALIBRATION
 
 #ifndef CONFIG_QSPI_BOOT
 /* MMC ENV related defines */
