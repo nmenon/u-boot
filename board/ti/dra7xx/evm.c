@@ -107,7 +107,7 @@ void recalibrate_iodelay(void)
 {
 	__recalibrate_iodelay(core_padconf_array_essential,
 			      ARRAY_SIZE(core_padconf_array_essential),
-			      NULL, 0);
+			      iodelay_cfg_array, ARRAY_SIZE(iodelay_cfg_array));
 }
 
 #if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_GENERIC_MMC)
