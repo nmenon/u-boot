@@ -621,6 +621,11 @@ The following options need to be configured:
 		exists, unlike the similar options in the Linux kernel. Do not
 		set these options unless they apply!
 
+		NOTE: The following are machine specific errata that are enabled
+		with CONFIG_ARM_ARCH_CP15_ERRATA define. These need to have an
+		SoC specific implementation of the erratum workaround to
+		function.
+
 - Driver Model
 		Driver model is a new framework for devices in U-Boot
 		introduced in early 2014. U-Boot is being progressively

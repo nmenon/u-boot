@@ -163,6 +163,20 @@ ENTRY(cpu_init_cp15)
 	mcr	p15, 0, r0, c15, c0, 1	@ write diagnostic register
 #endif
 
+#ifdef CONFIG_ARM_ARCH_CP15_ERRATA
+	mrc p15, 0, r0, c0, c0, 0	@ r0 has Read Main ID Register (MIDR)
+	mov r1, r0, lsr #20		@ get variant field
+	and r1, r1, #0xf		@ r1 has CPU variant
+	and r2, r0, #0xf                @ r2 has CPU revision
+	mov r3, r1, lsl #4		@ shift variant field for combined value
+	orr r3, r2, r3                  @ r3 has combined CPU variant + revision
+	/* C Prototype:
+	 * void arch_cp15_errata_workaround(u32 midr, u32 variant,
+	 *				    u32 rev, u32 comb);
+	 */
+	b arch_cp15_errata_workaround @ Do Machine specific errata WAs
+#endif
+
 	mov	pc, lr			@ back to my caller
 ENDPROC(cpu_init_cp15)
 
