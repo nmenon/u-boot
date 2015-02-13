@@ -625,6 +625,7 @@ The following options need to be configured:
 		with CONFIG_ARM_ARCH_CP15_ERRATA define. These need to have an
 		SoC specific implementation of the erratum workaround to
 		function.
+		CONFIG_ARM_ERRATA_798870
 
 - Driver Model
 		Driver model is a new framework for devices in U-Boot
