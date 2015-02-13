@@ -26,6 +26,9 @@ ifeq ($(CONFIG_SYS_DCACHE_OFF),)
 obj-y	+= omap-cache.o
 endif
 
+plus_sec := $(call as-instr,.arch_extension sec,+sec)
+AFLAGS_lowlevel_init.o	:=-Wa,-march=armv7-a$(plus_sec)
+
 ifeq ($(CONFIG_OMAP34XX),)
 obj-y	+= boot-common.o
 obj-y	+= lowlevel_init.o
