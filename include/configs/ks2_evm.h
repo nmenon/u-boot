@@ -225,6 +225,7 @@
 #define CONFIG_CMD_USB
 #define CONFIG_CMD_FAT
 #define CONFIG_CMD_FS_GENERIC
+#define CONFIG_CMD_BOOTZ
 
 /* U-Boot general configuration */
 #define CONFIG_SYS_GENERIC_BOARD
@@ -233,6 +234,7 @@
 #define CONFIG_SYS_PBSIZE		2048
 #define CONFIG_SYS_MAXARGS		16
 #define CONFIG_SYS_HUSH_PARSER
+#define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_CRC32_VERIFY
 #define CONFIG_MX_CYCLIC
@@ -245,31 +247,59 @@
 
 #define CONFIG_BOOTDELAY		3
 #define CONFIG_BOOTFILE			"uImage"
+/*
+ * Our DDR memory always starts at 0x80000000 and U-Boot shall have
+ * relocated itself to higher in memory by the time this value is used.
+ * However, set this to a 32MB offset to allow for easier Linux kernel
+ * booting as the default is often used as the kernel load address.
+ */
+#define CONFIG_SYS_LOAD_ADDR		0x82000000
+
+/*
+ * We setup defaults based on constraints from the Linux kernel, which should
+ * also be safe elsewhere.  We have the default load at 32MB into DDR (for
+ * the kernel), FDT above 128MB (the maximum location for the end of the
+ * kernel), and the ramdisk 512KB above that (allowing for hopefully never
+ * seen large trees).  We say all of this must be within the first 256MB
+ * as that will normally be within the kernel lowmem and thus visible via
+ * bootm_size and we only run on platforms with 256MB or more of memory.
+ */
+#define DEFAULT_LINUX_BOOT_ENV \
+	"loadaddr=0x82000000\0" \
+	"kernel_addr_r=0x82000000\0" \
+	"fdtaddr=0x88000000\0" \
+	"fdt_addr_r=0x88000000\0" \
+	"rdaddr=0x88080000\0" \
+	"ramdisk_addr_r=0x88080000\0" \
+	"bootm_size=0x10000000\0"
+
 #define CONFIG_EXTRA_ENV_SETTINGS					\
+	DEFAULT_LINUX_BOOT_ENV \
 	CONFIG_EXTRA_ENV_KS2_BOARD_SETTINGS				\
 	"boot=ubi\0"							\
 	"tftp_root=/\0"							\
 	"nfs_root=/export\0"						\
 	"mem_lpae=1\0"							\
 	"mem_reserve=512M\0"						\
-	"addr_fdt=0x87000000\0"						\
-	"addr_kern=0x88000000\0"					\
-	"addr_uboot=0x87000000\0"					\
-	"addr_fs=0x82000000\0"						\
-	"addr_ubi=0x82000000\0"						\
+	"addr_uboot=${loadaddr}\0"					\
+	"addr_ubi=${loadaddr}\0"					\
 	"addr_secdb_key=0xc000000\0"					\
-	"fdt_high=0xffffffff\0"						\
 	"name_kern=uImage-keystone-evm.bin\0"				\
 	"run_mon=mon_install ${addr_mon}\0"				\
-	"run_kern=bootm ${addr_kern} - ${addr_fdt}\0"			\
+	"run_kern=if iminfo ${kernel_addr_r}; then "			\
+		"  bootm ${kernel_addr_r} - ${fdt_addr_r}; "		\
+		"else "							\
+		"  bootz ${kernel_addr_r} - ${fdt_addr_r}; "		\
+		"  bootm ${kernel_addr_r} - ${fdt_addr_r}; "		\
+		"fi;\0"							\
 	"init_net=run args_all args_net\0"				\
 	"init_ubi=run args_all args_ubi; "				\
 		"ubi part ubifs; ubifsmount ubi:boot;"			\
 		"ubifsload ${addr_secdb_key} securedb.key.bin;\0"       \
-	"get_fdt_net=dhcp ${addr_fdt} ${tftp_root}/${name_fdt}\0"	\
-	"get_fdt_ubi=ubifsload ${addr_fdt} ${name_fdt}\0"		\
-	"get_kern_net=dhcp ${addr_kern} ${tftp_root}/${name_kern}\0"	\
-	"get_kern_ubi=ubifsload ${addr_kern} ${name_kern}\0"		\
+	"get_fdt_net=dhcp ${fdt_addr_r} ${tftp_root}/${name_fdt}\0"	\
+	"get_fdt_ubi=ubifsload ${fdt_addr_r} ${name_fdt}\0"		\
+	"get_kern_net=dhcp ${kernel_addr_r} ${tftp_root}/${name_kern}\0"	\
+	"get_kern_ubi=ubifsload ${kernel_addr_r} ${name_kern}\0"	\
 	"get_mon_net=dhcp ${addr_mon} ${tftp_root}/${name_mon}\0"	\
 	"get_mon_ubi=ubifsload ${addr_mon} ${name_mon}\0"		\
 	"get_uboot_net=dhcp ${addr_uboot} ${tftp_root}/${name_uboot}\0"	\
@@ -282,24 +312,27 @@
 		"root=/dev/nfs rw nfsroot=${serverip}:${nfs_root},"	\
 		"${nfs_options} ip=dhcp\0"				\
 	"nfs_options=v3,tcp,rsize=4096,wsize=4096\0"			\
-	"get_fdt_ramfs=dhcp ${addr_fdt} ${tftp_root}/${name_fdt}\0"	\
-	"get_kern_ramfs=dhcp ${addr_kern} ${tftp_root}/${name_kern}\0"	\
+	"get_fdt_ramfs=dhcp ${fdt_addr_r} ${tftp_root}/${name_fdt}\0"	\
+	"get_kern_ramfs=dhcp ${kernel_addr_r} ${tftp_root}/${name_kern}\0" \
 	"get_mon_ramfs=dhcp ${addr_mon} ${tftp_root}/${name_mon}\0"	\
-	"get_fs_ramfs=dhcp ${addr_fs} ${tftp_root}/${name_fs}\0"	\
+	"get_fs_ramfs=dhcp ${ramdisk_addr_r} ${tftp_root}/${name_fs}\0"	\
 	"get_ubi_net=dhcp ${addr_ubi} ${tftp_root}/${name_ubi}\0"	\
 	"burn_ubi=nand erase.part ubifs; "				\
 		"nand write ${addr_ubi} ubifs ${filesize}\0"		\
 	"init_ramfs=run args_all args_ramfs get_fs_ramfs\0"		\
 	"args_ramfs=setenv bootargs ${bootargs} "			\
 		"rdinit=/sbin/init rw root=/dev/ram0 "			\
-		"initrd=0x802000000,9M\0"				\
+		"initrd=${ramdisk_addr_r},9M\0"				\
 	"no_post=1\0"							\
 	"mtdparts=mtdparts=davinci_nand.0:"				\
 		"1024k(bootloader)ro,512k(params)ro,-(ubifs)\0"
 
 #define CONFIG_BOOTCOMMAND						\
-	"run init_${boot} get_fdt_${boot} get_mon_${boot} "		\
-		"get_kern_${boot} run_mon run_kern"
+	"if run init_${boot}; then "					\
+		"if run get_fdt_${boot} get_mon_${boot} get_kern_${boot}; then " \
+			"run run_mon run_kern; "			\
+		"fi; "							\
+	"fi; "
 
 #define CONFIG_BOOTARGS							\
 
@@ -309,7 +342,6 @@
 #define CONFIG_OF_LIBFDT		1
 #define CONFIG_OF_BOARD_SETUP
 #define CONFIG_SYS_BARGSIZE		1024
-#define CONFIG_SYS_LOAD_ADDR		(CONFIG_SYS_SDRAM_BASE + 0x08000000)
 #define CONFIG_LINUX_BOOT_PARAM_ADDR	(CONFIG_SYS_SDRAM_BASE + 0x100)
 
 #define CONFIG_SUPPORT_RAW_INITRD

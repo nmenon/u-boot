@@ -21,6 +21,7 @@
 	"addr_mon=0x0c5f0000\0"						\
 	"args_ubi=setenv bootargs ${bootargs} rootfstype=ubifs "	\
 	"root=ubi0:rootfs rootflags=sync rw ubi.mtd=2,2048\0"		\
+	"findfdt=setenv name_fdt k2hk-evm.dtb\0"			\
 	"name_fdt=uImage-k2hk-evm.dtb\0"				\
 	"name_mon=skern-k2hk-evm.bin\0"					\
 	"name_ubi=k2hk-evm-ubifs.ubi\0"					\
