@@ -81,6 +81,30 @@ To build u-boot-nand.gph
   >make k2hk_evm_defconfig
   >make u-boot-nand.gph
 
+To build u-boot-uart.gph
+  >make k2hk_evm_defconfig
+  >make u-boot-uart.gph
+
+Load and Run U-Boot on keystone EVMs using UART
+===============================================
+
+In this method, we use xmodem to download and start the modified
+version of uart binary to the target over serial port. Open the BCM
+and regular UART port at 115200n8 configuration. Steps are rather trivial:
+
+1. At the BCM terminal, select the following to configure DSP noboot:
+	bootmode #15
+	reboot
+   This should prevent any existing bootloader OR OS from starting up
+   on UART
+2. Start Xmodem transfer of the file u-boot-uart.gph on the regular UART port
+   using minicom OR appropriate terminal emulator.
+3. At the BCM terminal, Switch over to UART mode and restart.
+	bootmode #4
+	reboot
+4. At the UART terminal, the transfer completes and u-boot startsup. This may
+   be used to download and flash u-boot to nand/spi etc.
+
 Load and Run U-Boot on keystone EVMs using CCS
 =========================================
 
