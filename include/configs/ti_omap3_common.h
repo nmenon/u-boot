@@ -27,6 +27,12 @@
 # define CONFIG_SYS_MALLOC_F_LEN	(1 << 10)
 #endif
 
+/* Common ARM Erratas */
+#define CONFIG_ARM_ARCH_CP15_ERRATA
+#define CONFIG_ARM_ERRATA_454179
+#define CONFIG_ARM_ERRATA_430973
+#define CONFIG_ARM_ERRATA_621766
+
 /* The chip has SDRC controller */
 #define CONFIG_SDRC
 

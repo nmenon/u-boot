@@ -35,7 +35,6 @@ DECLARE_GLOBAL_DATA_PTR;
 
 /* Declarations */
 extern omap3_sysinfo sysinfo;
-static void omap3_setup_aux_cr(void);
 #ifndef CONFIG_SYS_L2CACHE_OFF
 static void omap3_invalidate_l2_cache_secure(void);
 #endif
@@ -246,9 +245,6 @@ void s_init(void)
 
 	try_unlock_memory();
 
-	/* Errata workarounds */
-	omap3_setup_aux_cr();
-
 #ifndef CONFIG_SYS_L2CACHE_OFF
 	/* Invalidate L2-cache from secure mode */
 	omap3_invalidate_l2_cache_secure();
@@ -426,18 +422,6 @@ void omap3_update_aux_cr_secure(u32 set_bits, u32 clear_bits)
 		omap3_emu_romcode_call(OMAP3_EMU_HAL_API_WRITE_ACR,
 				       (u32 *)&emu_romcode_params);
 	}
-}
-
-static void omap3_setup_aux_cr(void)
-{
-	/* Workaround for Cortex-A8 errata: #454179 #430973
-	 *	Set "IBE" bit
-	 *	Set "Disable Branch Size Mispredicts" bit
-	 * Workaround for erratum #621766
-	 *	Enable L1NEON bit
-	 * ACR |= (IBE | DBSM | L1NEON) => ACR |= 0xE0
-	 */
-	omap3_update_aux_cr_secure(0xE0, 0);
 }
 
 #ifndef CONFIG_SYS_L2CACHE_OFF
