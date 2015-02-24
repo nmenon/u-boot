@@ -408,7 +408,7 @@ static void omap3_emu_romcode_call(u32 service_id, u32 *parameters)
 	do_omap3_emu_romcode_call(service_id, OMAP3_PUBLIC_SRAM_SCRATCH_AREA);
 }
 
-static void omap3_update_aux_cr_secure(u32 set_bits, u32 clear_bits)
+void omap3_update_aux_cr_secure(u32 set_bits, u32 clear_bits)
 {
 	u32 acr;
 

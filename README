@@ -625,6 +625,9 @@ The following options need to be configured:
 		with CONFIG_ARM_ARCH_CP15_ERRATA define. These need to have an
 		SoC specific implementation of the erratum workaround to
 		function.
+		CONFIG_ARM_ERRATA_430973
+		CONFIG_ARM_ERRATA_454179
+		CONFIG_ARM_ERRATA_621766
 		CONFIG_ARM_ERRATA_798870
 
 - Driver Model

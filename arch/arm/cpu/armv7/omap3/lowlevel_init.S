@@ -48,6 +48,43 @@ ENTRY(do_omap3_emu_romcode_call)
 	POP {r4-r12, pc}
 ENDPROC(do_omap3_emu_romcode_call)
 
+#ifdef CONFIG_ARM_ARCH_CP15_ERRATA
+	.globl  arch_cp15_errata_workaround
+/*
+ * R0 has MIDR
+ * R1 has CPU Variant (bits 20-23)
+ * R2 has CPU Revision (bits 0-3)
+ * R3 is compbined CPU variant << 4 + CPU revision
+ */
+ENTRY(arch_cp15_errata_workaround)
+	push    {r4-r12, lr}		@ save registers - ROM code may pollute
+
+	mov r0, #0			@ Nothing to set in ACR
+	mov r1, #0			@ Nothing to clear in ACR
+
+#ifdef CONFIG_ARM_ERRATA_454179
+	cmp r3, #0x21			@ Only on < r2p1
+	orrlt r0, r0, #(0x3 << 6)	@ Set DBSM(BIT7) and IBE(BIT6) bits
+#endif
+
+#ifdef CONFIG_ARM_ERRATA_430973
+	cmp r3, #0x21			@ Only on < r2p1
+	orrlt r0, r0, #(0x1 << 6)	@ Set IBE bit
+#endif
+
+#ifdef CONFIG_ARM_ERRATA_621766
+	cmp r3, #0x21			@ Only on < r2p1
+	orrlt r0, r0, #(0x1 << 5)	@ Set L1NEON bit
+#endif
+
+	add r2, r1, r0
+	teq r2, #0			@ See if nothing to set or clear
+	bne	omap3_update_aux_cr_secure	@update as per ROM code configuration needs
+
+	pop     {r4-r12, pc}		@restore the registers back.
+ENDPROC(arch_cp15_errata_workaround)
+#endif
+
 #if !defined(CONFIG_SYS_NAND_BOOT) && !defined(CONFIG_SYS_NAND_BOOT)
 /**************************************************************************
  * cpy_clk_code: relocates clock code into SRAM where its safer to execute
