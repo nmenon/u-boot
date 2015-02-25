@@ -187,6 +187,18 @@ ENTRY(cpu_init_cp15)
 skip_errata_798870:
 #endif
 
+#ifdef CONFIG_ARM_ERRATA_454179
+	adr r0,  _id
+	ldmia r0, {r1-r4}
+	cmp	r2, #0x21		@ Only on < r2p1
+	bge	skip_errata_454179
+
+	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
+	orr	r0, r0, #(0x3 << 6)	@ Set DBSM(BIT7) and IBE(BIT6) bits
+	b	v7_arch_cp15_set_acr
+skip_errata_454179:
+#endif
+
 	mov	pc, lr			@ back to my caller
 
 _id:		.word
