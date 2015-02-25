@@ -199,6 +199,18 @@ skip_errata_798870:
 skip_errata_454179:
 #endif
 
+#ifdef CONFIG_ARM_ERRATA_430973
+	adr r0,  _id
+	ldmia r0, {r1-r4}
+	cmp	r2, #0x21		@ Only on < r2p1
+	bge	skip_errata_430973
+
+	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
+	orr	r0, r0, #(0x1 << 6)	@ Set IBE bit
+	b	v7_arch_cp15_set_acr
+skip_errata_430973:
+#endif
+
 	mov	pc, lr			@ back to my caller
 
 _id:		.word
