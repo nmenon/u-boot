@@ -208,6 +208,17 @@ skip_errata_454179:
 skip_errata_430973:
 #endif
 
+#ifdef CONFIG_ARM_ERRATA_621766
+	cmp	r2, #0x21		@ Only on < r2p1
+	blt	skip_errata_621766
+
+	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
+	orr	r0, r0, #(0x1 << 5)	@ Set L1NEON bit
+	b	v7_arch_cp15_set_acr
+
+skip_errata_621766:
+#endif
+
 	mov	pc, lr			@ back to my caller
 ENDPROC(cpu_init_cp15)
 
