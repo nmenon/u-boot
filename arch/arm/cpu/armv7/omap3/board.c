@@ -424,7 +424,7 @@ void v7_arch_cp15_set_acr(u32 acr, u32 cpu_midr, u32 cpu_rev_comb,
 		omap3_set_aux_cr_secure(acr);
 
 	/* Write ACR - affects non-secure banked bits - some erratas need it */
-	asm volatile ("mcr p15, 0, %0, c1, c0, 1" : : "r" (acr));
+	//asm volatile ("mcr p15, 0, %0, c1, c0, 1" : : "r" (acr));
 }
 
 

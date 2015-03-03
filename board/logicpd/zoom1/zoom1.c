@@ -139,6 +139,18 @@ int board_eth_init(bd_t *bis)
 	}
 #endif
 
+	{
+		u32 id;
+		u32 acr, l2auxcr;
+
+		asm volatile("mrc p15, 0, %0, c0, c0, 0" : "=r"(id));
+
+		asm volatile("mrc p15, 0, %0, c1, c0, 1" : "=r"(acr));
+		asm volatile("mrc p15, 1, %0, c9, c0, 2" : "=r"(l2auxcr));
+		printf("XXXX %s:CPUID=0x%08x ACR=0x%08x L2AUXCR=0x%08xn",
+			__func__, id, acr, l2auxcr);
+	}
+
 	return rc;
 }
 #endif
