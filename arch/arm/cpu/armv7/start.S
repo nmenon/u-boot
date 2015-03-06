@@ -190,7 +190,7 @@ skip_errata_798870:
 
 #ifdef CONFIG_ARM_ERRATA_454179
 	cmp	r2, #0x21		@ Only on < r2p1
-	bge	skip_errata_454179
+	blt	skip_errata_454179
 
 	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
 	orr	r0, r0, #(0x3 << 6)	@ Set DBSM(BIT7) and IBE(BIT6) bits
@@ -203,7 +203,7 @@ skip_errata_454179:
 
 #ifdef CONFIG_ARM_ERRATA_430973
 	cmp	r2, #0x21		@ Only on < r2p1
-	bge	skip_errata_430973
+	blt	skip_errata_430973
 
 	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
 	orr	r0, r0, #(0x1 << 6)	@ Set IBE bit
@@ -216,7 +216,7 @@ skip_errata_430973:
 
 #ifdef CONFIG_ARM_ERRATA_621766
 	cmp	r2, #0x21		@ Only on < r2p1
-	bge	skip_errata_621766
+	blt	skip_errata_621766
 
 	mrc	p15, 0, r0, c1, c0, 1	@ Read ACR
 	orr	r0, r0, #(0x1 << 5)	@ Set L1NEON bit
