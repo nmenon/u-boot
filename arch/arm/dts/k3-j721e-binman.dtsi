@@ -413,6 +413,7 @@
 					};
 					spl_j721e_sk_dtb: blob-ext {
 						filename = SPL_J721E_SK_DTB;
+						optional;
 					};
 				};
 			};
@@ -496,6 +497,7 @@
 					};
 					j721e_sk_dtb: blob-ext {
 						filename = J721E_SK_DTB;
+						optional;
 					};
 					hash {
 						algo = "crc32";
@@ -605,6 +607,7 @@
 					optional;
 					blob {
 						filename = SPL_J721E_SK_DTB;
+						optional;
 					};
 				};
 			};
@@ -675,6 +678,7 @@
 					optional;
 					blob {
 						filename = J721E_SK_DTB;
+						optional;
 					};
 					hash {
 						algo = "crc32";
