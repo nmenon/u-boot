@@ -122,8 +122,7 @@ Don't forget to add CROSS_COMPILE.
 
 To build u-boot.bin, u-boot-spi.gph, MLO:
 
-.. prompt:: bash
-   :prompts: $
+.. prompt:: bash $
 
    make k2hk_evm_defconfig
    make
@@ -197,8 +196,7 @@ instructions:
 4. Free Run the target as described earlier (step 4) to get U-Boot prompt
 5. At the U-Boot console type following to setup U-Boot environment variables.
 
-.. prompt:: bash
-   :prompts: =>
+.. prompt:: bash =>
 
    setenv addr_uboot 0x87000000
    setenv filesize <size in hex of u-boot-spi.gph rounded to hex 0x10000>
@@ -226,8 +224,7 @@ instructions:
 4. Free Run the target as described earlier (step 4) to get U-Boot prompt
 5. At the U-Boot console type following to setup U-Boot environment variables.
 
-.. prompt:: bash
-   :prompts: =>
+.. prompt:: bash =>
 
    setenv filesize <size in hex of MLO rounded to hex 0x10000>
    run burn_uboot_nand

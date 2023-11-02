@@ -476,8 +476,7 @@ then the saveenv command and can be used across various bootmodes too.
 
 **Writing to MMC/EMMC**
 
-.. prompt:: bash
-  :prompts: =>
+.. prompt:: bash =>
 
   env export -t $loadaddr <list of variables>
   fatwrite mmc ${mmcdev} ${loadaddr} ${bootenvfile} ${filesize}
@@ -490,8 +489,7 @@ mmcdev) and set the environments.
 If manually needs to be done then the environment can be read from the
 filesystem and then imported
 
-.. prompt:: bash
-  :prompts: =>
+.. prompt:: bash =>
 
   fatload mmc ${mmcdev} ${loadaddr} ${bootenvfile}
   env import -t ${loadaddr} ${filesize}
