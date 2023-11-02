@@ -926,7 +926,7 @@ command.
 
 To connect to your desired core, run the following command within GDB:
 
-.. code-block:: bash
+.. prompt:: bash (gdb)
 
   target extended-remote localhost:{port for desired core}
 
@@ -943,13 +943,13 @@ To load symbols:
 
 * Prior to relocation:
 
-.. code-block:: bash
+.. prompt:: bash (gdb)
 
   symbol-file {path to elf file}
 
 * After relocation:
 
-.. code-block:: bash
+.. prompt:: bash (gdb)
 
   # Drop old symbol file
   symbol-file
@@ -960,7 +960,7 @@ To load symbols:
 
 In the above example of AM625,
 
-.. code-block:: bash
+.. prompt:: bash (gdb)
 
   target extended-remote localhost:3338     <- R5F (Wakeup Domain)
   target extended-remote localhost:3334     <- A53 (Main Domain)
@@ -980,7 +980,7 @@ breakpoints. To exit the debug loop added above, add any breakpoints
 needed and run the following GDB commands to step out of the debug
 loop set in the ``board_init_f`` function.
 
-.. code-block:: bash
+.. prompt:: bash (gdb)
 
   set x = 0
   continue
